@@ -33,8 +33,7 @@ $ whoami
 
 <div align="center">
 
-> *"Talk is cheap. Show me the code."*
-> — Linus Torvalds
+> *"The best way to predict the future is to invent it"*
 
 </div>
 
@@ -110,15 +109,15 @@ Most "QR check-in" projects stop at generating a code and scanning it. Mine goes
 <br>
 <img src="https://skillicons.dev/icons?i=mongodb,express,react,nodejs,js,tailwind" />
 
-<br><br>
+
 
 **Languages & CS Fundamentals**
 <br>
 <img src="https://skillicons.dev/icons?i=cpp,java,python" />
 <br>
-<sub>DSA: Arrays, Hash Tables, Binary Search, Trees, Graphs, DP, Divide & Conquer · OOP · DBMS · OS · System Design</sub>
+<sub>· OOP · DBMS · OS · System Design</sub>
 
-<br><br>
+<
 
 **Auth, Cloud & AI Integrations**
 <br>
@@ -131,12 +130,6 @@ Most "QR check-in" projects stop at generating a code and scanning it. Mine goes
 <img src="https://skillicons.dev/icons?i=git,github,postman,vscode,vite,vercel" />
 
 <br><br>
-
-**Currently leveling up**
-<br>
-<img src="https://skillicons.dev/icons?i=typescript" />
-
-</div>
 
 ---
 
