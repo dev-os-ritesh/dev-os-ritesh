@@ -26,6 +26,7 @@ $ whoami
 > based in: Pune, Maharashtra, India
 > currently: B.E. Information Technology, D.Y. Patil College of Engineering (2023–2027)
 > shipped: a secure dual-portal QR event check-in platform
+> shipped : Investo -Trade Simulation platform.
 > shipped: QuickBlog — an AI-powered MERN blog platform (Groq LLaMA integration)
 > learning:System Design
 > status: open to internship opportunities — full-stack / backend / frontend
