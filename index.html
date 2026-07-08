@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>byte-runner // dev.exe</title>
+<style>
+  @font-face {
+    font-family: 'GameMono';
+    src: local('JetBrains Mono'), local('Fira Code'), local('Consolas');
+  }
+
+  :root {
+    --bg: #0a0d09;
+    --bg-raised: #10140d;
+    --amber: #ffb000;
+    --amber-dim: #7a5500;
+    --amber-bright: #ffd166;
+    --white: #e8e6df;
+    --red: #ff5555;
+    --line: #2a2f22;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--white);
+    font-family: 'GameMono', 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    overflow: hidden;
+  }
+
+  .crt {
+    width: min(820px, 96vw);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--bg-raised);
+    box-shadow:
+      0 0 0 1px rgba(255,176,0,0.06),
+      0 20px 60px rgba(0,0,0,0.6),
+      inset 0 0 80px rgba(255,176,0,0.04);
+    padding: 18px 20px 22px;
+    position: relative;
+  }
+
+  .titlebar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+    font-size: 13px;
+    color: var(--amber-dim);
+    letter-spacing: 0.5px;
+  }
+
+  .titlebar .dots span {
+    display: inline-block;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    margin-left: 6px;
+    background: var(--line);
+  }
+
+  .hud {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    margin-bottom: 8px;
+    color: var(--amber);
+    letter-spacing: 0.5px;
+  }
+
+  .hud .label { color: var(--amber-dim); }
+
+  canvas {
+    display: block;
+    width: 100%;
+    height: auto;
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(255,176,0,0.05), transparent 60%),
+      var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    image-rendering: pixelated;
+  }
+
+  .scanlines {
+    pointer-events: none;
+    position: absolute;
+    inset: 18px 20px 22px;
+    border-radius: 6px;
+    background: repeating-linear-gradient(
+      to bottom,
+      rgba(0,0,0,0.12) 0px,
+      rgba(0,0,0,0.12) 1px,
+      transparent 2px,
+      transparent 3px
+    );
+    mix-blend-mode: multiply;
+    opacity: 0.35;
+  }
+
+  .footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 12px;
+    font-size: 12px;
+    color: var(--amber-dim);
+  }
+
+  .footer .key {
+    color: var(--amber);
+    border: 1px solid var(--amber-dim);
+    border-radius: 4px;
+    padding: 1px 6px;
+    margin: 0 2px;
+  }
+
+  .overlay {
+    position: absolute;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background: rgba(6,8,5,0.88);
+    border-radius: 10px;
+    text-align: center;
+    padding: 20px;
+  }
+
+  .overlay.show { display: flex; }
+
+  .overlay h1 {
+    font-size: clamp(20px, 4vw, 30px);
+    color: var(--red);
+    margin: 0 0 6px;
+    letter-spacing: 0.5px;
+  }
+
+  .overlay p {
+    color: var(--white);
+    opacity: 0.85;
+    margin: 4px 0;
+    font-size: 14px;
+  }
+
+  .overlay .score-line {
+    color: var(--amber-bright);
+    font-size: 16px;
+    margin: 10px 0 18px;
+  }
+
+  .btn {
+    background: transparent;
+    border: 1px solid var(--amber);
+    color: var(--amber);
+    font-family: inherit;
+    font-size: 14px;
+    padding: 10px 18px;
+    border-radius: 6px;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+
+  .btn:hover {
+    background: var(--amber);
+    color: #0a0d09;
+  }
+
+  .start h1 {
+    color: var(--amber-bright);
+  }
+
+  .blink {
+    animation: blink 1.1s step-start infinite;
+  }
+
+  @keyframes blink {
+    50% { opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="crt">
+    <div class="titlebar">
+      <span>~/dev/byte-runner — zsh</span>
+      <span class="dots"><span></span><span></span><span></span></span>
+    </div>
+
+    <div class="hud">
+      <span><span class="label">commits:</span> <span id="score">0</span></span>
+      <span><span class="label">best:</span> <span id="best">0</span></span>
+      <span><span class="label">$</span> git status <span class="blink">_</span></span>
+    </div>
+
+    <div style="position: relative;">
+      <canvas id="game" width="760" height="260"></canvas>
+      <div class="scanlines" style="inset:0;"></div>
+
+      <div class="overlay start show" id="startOverlay">
+        <h1>$ ./byte-runner</h1>
+        <p>you are the cursor. dodge the bugs. commit often.</p>
+        <p style="margin-bottom:18px;">press <b>space</b> / <b>tap</b> to jump</p>
+        <button class="btn" id="startBtn">run program</button>
+      </div>
+
+      <div class="overlay" id="overOverlay">
+        <h1>Segmentation fault (core dumped)</h1>
+        <p class="score-line">commits shipped: <span id="finalScore">0</span></p>
+        <button class="btn" id="retryBtn">git reset --hard && run</button>
+      </div>
+    </div>
+
+    <div class="footer">
+      <span><span class="key">SPACE</span> / <span class="key">TAP</span> jump</span>
+      <span>built by dev-os-ritesh · MERN dev</span>
+    </div>
+  </div>
+
+<script>
+(function () {
+  const canvas = document.getElementById('game');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const GROUND_Y = H - 46;
+
+  const scoreEl = document.getElementById('score');
+  const bestEl = document.getElementById('best');
+  const finalScoreEl = document.getElementById('finalScore');
+  const startOverlay = document.getElementById('startOverlay');
+  const overOverlay = document.getElementById('overOverlay');
+  const startBtn = document.getElementById('startBtn');
+  const retryBtn = document.getElementById('retryBtn');
+
+  let best = Number(localStorage.getItem('byteRunnerBest') || 0);
+  bestEl.textContent = best;
+
+  const player = {
+    x: 70,
+    y: GROUND_Y,
+    w: 26,
+    h: 32,
+    vy: 0,
+    jumping: false,
+    blinkPhase: 0
+  };
+
+  const GRAVITY = 0.62;
+  const JUMP_FORCE = -11.2;
+
+  let obstacles = [];
+  let particles = [];
+  let speed = 5.2;
+  let spawnTimer = 0;
+  let spawnInterval = 95;
+  let frame = 0;
+  let score = 0;
+  let running = false;
+  let gameOver = false;
+
+  const BUG = '🐛';
+  const COMMIT_ICONS = ['☕', '⚡', '{ }'];
+
+  function resetGame() {
+    obstacles = [];
+    particles = [];
+    speed = 5.2;
+    spawnTimer = 0;
+    spawnInterval = 95;
+    frame = 0;
+    score = 0;
+    player.y = GROUND_Y;
+    player.vy = 0;
+    player.jumping = false;
+    gameOver = false;
+    scoreEl.textContent = '0';
+  }
+
+  function jump() {
+    if (!running) return;
+    if (!player.jumping) {
+      player.vy = JUMP_FORCE;
+      player.jumping = true;
+    }
+  }
+
+  function spawnObstacle() {
+    const isCollectible = Math.random() < 0.38;
+    if (isCollectible) {
+      obstacles.push({
+        type: 'coin',
+        x: W + 20,
+        y: GROUND_Y - 60 - Math.random() * 40,
+        w: 20,
+        h: 20,
+        icon: COMMIT_ICONS[Math.floor(Math.random() * COMMIT_ICONS.length)]
+      });
+    } else {
+      obstacles.push({
+        type: 'bug',
+        x: W + 20,
+        y: GROUND_Y + player.h - 26,
+        w: 26,
+        h: 26
+      });
+    }
+  }
+
+  function rectsOverlap(a, b) {
+    return a.x < b.x + b.w &&
+           a.x + a.w > b.x &&
+           a.y < b.y + b.h &&
+           a.y + a.h > b.y;
+  }
+
+  function spawnParticles(x, y, color) {
+    for (let i = 0; i < 8; i++) {
+      particles.push({
+        x, y,
+        vx: (Math.random() - 0.5) * 4,
+        vy: (Math.random() - 1) * 4,
+        life: 24,
+        color
+      });
+    }
+  }
+
+  function update() {
+    frame++;
+
+    // player physics
+    player.vy += GRAVITY;
+    player.y += player.vy;
+    if (player.y > GROUND_Y) {
+      player.y = GROUND_Y;
+      player.vy = 0;
+      player.jumping = false;
+    }
+
+    // difficulty ramp
+    speed = 5.2 + Math.min(frame / 900, 4.5);
+    spawnInterval = Math.max(48, 95 - Math.floor(frame / 200));
+
+    // spawn
+    spawnTimer++;
+    if (spawnTimer >= spawnInterval) {
+      spawnTimer = 0;
+      spawnObstacle();
+    }
+
+    // move obstacles
+    const playerBox = { x: player.x, y: player.y, w: player.w, h: player.h };
+
+    for (let i = obstacles.length - 1; i >= 0; i--) {
+      const o = obstacles[i];
+      o.x -= speed;
+
+      const obox = { x: o.x, y: o.y, w: o.w, h: o.h };
+      if (rectsOverlap(playerBox, obox)) {
+        if (o.type === 'coin') {
+          score += 5;
+          scoreEl.textContent = score;
+          spawnParticles(o.x + o.w / 2, o.y + o.h / 2, '#ffd166');
+          obstacles.splice(i, 1);
+          continue;
+        } else {
+          endGame();
+          return;
+        }
+      }
+
+      if (o.x < -40) obstacles.splice(i, 1);
+    }
+
+    // passive score for surviving (like commits per distance)
+    if (frame % 12 === 0) {
+      score += 1;
+      scoreEl.textContent = score;
+    }
+
+    // particles
+    for (let i = particles.length - 1; i >= 0; i--) {
+      const p = particles[i];
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy += 0.15;
+      p.life--;
+      if (p.life <= 0) particles.splice(i, 1);
+    }
+  }
+
+  function drawGround() {
+    ctx.strokeStyle = '#2a2f22';
+    ctx.setLineDash([6, 6]);
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(0, GROUND_Y + player.h);
+    ctx.lineTo(W, GROUND_Y + player.h);
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  function drawPlayer() {
+    const px = player.x, py = player.y;
+    ctx.fillStyle = '#ffb000';
+    ctx.fillRect(px, py, player.w, player.h);
+
+    // "cursor" notch to sell the terminal-cursor theme
+    ctx.fillStyle = '#0a0d09';
+    ctx.fillRect(px + 4, py + 6, player.w - 8, 5);
+    ctx.fillRect(px + 4, py + 16, player.w - 8, 5);
+
+    // glow
+    ctx.save();
+    ctx.shadowColor = '#ffb000';
+    ctx.shadowBlur = 12;
+    ctx.strokeStyle = 'rgba(255,176,0,0.5)';
+    ctx.strokeRect(px, py, player.w, player.h);
+    ctx.restore();
+  }
+
+  function drawObstacles() {
+    ctx.font = '22px monospace';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    obstacles.forEach(o => {
+      if (o.type === 'bug') {
+        ctx.fillText(BUG, o.x + o.w / 2, o.y + o.h / 2);
+      } else {
+        ctx.fillStyle = '#ffd166';
+        ctx.font = '16px monospace';
+        ctx.fillText(o.icon, o.x + o.w / 2, o.y + o.h / 2);
+        ctx.font = '22px monospace';
+      }
+    });
+  }
+
+  function drawParticles() {
+    particles.forEach(p => {
+      ctx.globalAlpha = Math.max(p.life / 24, 0);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(p.x, p.y, 3, 3);
+      ctx.globalAlpha = 1;
+    });
+  }
+
+  function drawBackground() {
+    ctx.clearRect(0, 0, W, H);
+
+    // faint scrolling "code lines" for atmosphere
+    ctx.fillStyle = 'rgba(255,176,0,0.05)';
+    for (let i = 0; i < 6; i++) {
+      const y = 20 + i * 34;
+      const w = 60 + (i * 47 + frame) % 180;
+      ctx.fillRect(20, y, w, 4);
+    }
+  }
+
+  function render() {
+    drawBackground();
+    drawGround();
+    drawObstacles();
+    drawPlayer();
+    drawParticles();
+  }
+
+  function loop() {
+    if (!running) return;
+    update();
+    if (!running) return; // update() may have ended the game
+    render();
+    requestAnimationFrame(loop);
+  }
+
+  function endGame() {
+    running = false;
+    gameOver = true;
+    if (score > best) {
+      best = score;
+      localStorage.setItem('byteRunnerBest', String(best));
+      bestEl.textContent = best;
+    }
+    finalScoreEl.textContent = score;
+    overOverlay.classList.add('show');
+  }
+
+  function startGame() {
+    resetGame();
+    startOverlay.classList.remove('show');
+    overOverlay.classList.remove('show');
+    running = true;
+    requestAnimationFrame(loop);
+  }
+
+  startBtn.addEventListener('click', startGame);
+  retryBtn.addEventListener('click', startGame);
+
+  window.addEventListener('keydown', (e) => {
+    if (e.code === 'Space') {
+      e.preventDefault();
+      if (!running && !gameOver && startOverlay.classList.contains('show')) {
+        startGame();
+      } else if (!running && gameOver) {
+        startGame();
+      } else {
+        jump();
+      }
+    }
+  });
+
+  canvas.addEventListener('pointerdown', () => {
+    if (!running && startOverlay.classList.contains('show')) {
+      startGame();
+    } else if (!running && gameOver) {
+      startGame();
+    } else {
+      jump();
+    }
+  });
+
+  // initial static render
+  drawBackground();
+  drawGround();
+  drawPlayer();
+})();
+</script>
+</body>
+</html>
