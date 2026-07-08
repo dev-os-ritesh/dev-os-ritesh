@@ -12,7 +12,7 @@
 
 I'm a full-stack developer who builds things end-to-end — schema to UI, auth to edge cases. I don't just make things that work on the happy path; I think about what breaks, who abuses it, and what happens when 500 people scan a QR code at once.
 
-I'm currently `[a student at YOUR_COLLEGE, studying YOUR_BRANCH]` `[/ working as YOUR_ROLE]`, based in `[YOUR_CITY, India]`. I got into development because `[REPLACE: e.g. "I wanted to build things people actually use, not just solve LeetCode problems"]`, and since then I've gone from writing basic JS scripts to shipping a full security-conscious platform solo.
+I'm currently in my penultimate year of a **B.E. in Information Technology at D.Y. Patil College of Engineering, Akurdi, Pune** (SGPA 8.51/10), based in Pune, India. Alongside coursework, I build full production-style systems on my own — most recently a security-conscious event platform and an AI-integrated blog platform — because I'd rather learn architecture by shipping than by reading about it.
 
 What I actually care about:
 - 🔍 Getting the *details* right — error states, edge cases, what happens when things go wrong
@@ -21,15 +21,14 @@ What I actually care about:
 
 ```bash
 $ whoami
-> name: Ritesh
+> name: Ritesh Ranbaware
 > role: Full-Stack MERN Developer
-> based in: [YOUR_CITY], India
-> currently: [student at YOUR_COLLEGE, YEAR] / [working at YOUR_COMPANY]
-> shipped: an AI-powered VS Code extension used by real developers
-> shipped: a secure dual-portal event check-in platform
-> learning: TypeScript
+> based in: Pune, Maharashtra, India
+> currently: B.E. Information Technology, D.Y. Patil College of Engineering (2023–2027)
+> shipped: a secure dual-portal QR event check-in platform
+> shipped: QuickBlog — an AI-powered MERN blog platform (Groq LLaMA integration)
+> learning: TypeScript, System Design
 > status: open to internship opportunities — full-stack / backend / frontend
-> outside of code: [REPLACE: e.g. gaming, football, reading, gym — whatever's true]
 ```
 
 <div align="center">
@@ -52,14 +51,29 @@ $ whoami
 
 Most "QR check-in" projects stop at generating a code and scanning it. Mine goes further, because the interesting engineering is in what happens *after* the scan:
 
-- 🔐 **JWT authentication** with role-based access across Attendee and Organizer portals
-- 🎫 **Encoded, tamper-resistant QR tickets** — auto-generated as PDFs and emailed via Nodemailer
-- ⚔️ **Fraud & abuse prevention** — atomic duplicate-scan blocking and cross-event ticket validation, so one stolen QR can't be reused
-- 📊 **Live organizer analytics dashboard** — real-time check-in counts as scans happen
+- 🔐 **JWT-authenticated, role-based REST API** with Mongoose schemas and bcryptjs password hashing
+- 🎫 **UUID-encoded QR tickets** — auto-generated as PDFs (PDFKit) and delivered via Nodemailer
+- ⚔️ **Fraud & abuse prevention** — in-browser camera QR scanning enforcing duplicate-entry and cross-event fraud checks
+- 📊 **Live organizer analytics dashboard** — real-time check-in data as scans happen
 
-**Stack:** React 19, Tailwind, TanStack Query · Node.js, Express, MongoDB, JWT, PDFKit
+**Stack:** React 19, Vite, MongoDB · Node.js, Express, JWT, PDFKit, Nodemailer
 
 <a href="https://github.com/dev-os-ritesh/QR-based-Event-Check-in-Platform"><img src="https://img.shields.io/badge/View%20Source-ffb000?style=for-the-badge&logoColor=black" /></a>
+
+</td>
+</tr>
+<tr>
+<td>
+
+### 🤖 QuickBlog — AI-Powered MERN Blog Platform
+**A full-stack blog platform with an LLM actually wired into the workflow, not bolted on.**
+
+- ✍️ **Groq LLaMA 3.3 70B integration** — auto-generates blog drafts from topic prompts, paired with a Quill rich-text editor
+- 🔑 JWT-secured admin panel with a live dashboard of blog, draft, and comment counts
+- 🖼️ **ImageKit CDN** with automatic WebP compression for image delivery, Multer-based uploads
+- 🚀 Deployed as separate client/server Vercel projects with production cross-origin configuration
+
+**Stack:** React 19, React Router v7, Tailwind CSS · Node.js, Express 5, MongoDB Atlas · Groq LLaMA API, ImageKit
 
 </td>
 </tr>
@@ -69,13 +83,22 @@ Most "QR check-in" projects stop at generating a code and scanning it. Mine goes
 <summary><b>🔍 Also worth a look</b></summary>
 <br>
 
-**CodeClarity** — an AI-powered VS Code extension giving inline code explanations and error breakdowns, built to support multiple AI providers (Gemini, OpenAI, local models) instead of locking to one vendor. Not a demo — a real, installable dev tool.
+**CodeClarity** — an AI-powered VS Code extension giving inline code explanations and error breakdowns, built to support multiple AI providers (Gemini, OpenAI, local models) instead of locking to one vendor.
 [→ View repo](https://github.com/dev-os-ritesh/CodeClarity)
 
-**Investo** — a full-stack trading platform simulation, built to practice real backend architecture and data flow between frontend, API, and database.
+**Investo** — a full-stack trade-simulation platform exploring real-world trading-system architecture across three integrated services: authentication, portfolio management, and order execution.
 [→ View repo](https://github.com/dev-os-ritesh/Investo)
 
 </details>
+
+---
+
+## 🏅 Achievements
+
+- 🏆 **Smart India Hackathon 2025** — qualified the internal round, presenting a scalable software solution to a national panel of 10+ industry experts, advancing from 100+ competing teams
+- 📊 **McKinsey & Company Forward Learner 2026** — completed structured modules on problem decomposition, data-driven communication, and leadership frameworks
+- 🎯 **JEE Advanced 2022** — All India Rank 6313 among 180,000+ candidates (top 0.3%)
+- 🥈 **International Mathematics Olympiad 2020** — State-Level Qualifier
 
 ---
 
@@ -89,9 +112,23 @@ Most "QR check-in" projects stop at generating a code and scanning it. Mine goes
 
 <br><br>
 
+**Languages & CS Fundamentals**
+<br>
+<img src="https://skillicons.dev/icons?i=cpp,java,python" />
+<br>
+<sub>DSA: Arrays, Hash Tables, Binary Search, Trees, Graphs, DP, Divide & Conquer · OOP · DBMS · OS · System Design</sub>
+
+<br><br>
+
+**Auth, Cloud & AI Integrations**
+<br>
+<sub>JWT · bcryptjs · Role-Based Access Control · Groq LLaMA API · ImageKit CDN · PDFKit · Nodemailer · TanStack Query</sub>
+
+<br><br>
+
 **Tools**
 <br>
-<img src="https://skillicons.dev/icons?i=git,vscode,html,css,vite" />
+<img src="https://skillicons.dev/icons?i=git,github,postman,vscode,vite,vercel" />
 
 <br><br>
 
@@ -139,9 +176,9 @@ Not a stats widget — how I actually work when I start a project:
 
 <div align="center">
 
-<a href="https://www.linkedin.com/in/YOUR-LINKEDIN/" target="_blank"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" /></a>
-<a href="mailto:YOUR-EMAIL@example.com"><img src="https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white" /></a>
-<a href="https://YOUR-PORTFOLIO.com" target="_blank"><img src="https://img.shields.io/badge/Portfolio-000000?style=for-the-badge&logo=vercel&logoColor=white" /></a>
+<a href="https://www.linkedin.com/in/Ritesh-Ranbaware" target="_blank"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" /></a>
+<a href="mailto:riteshranbaware@gmail.com"><img src="https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white" /></a>
+<a href="https://leetcode.com/u/Ritesh_Ranbaware" target="_blank"><img src="https://img.shields.io/badge/LeetCode-FFA116?style=for-the-badge&logo=leetcode&logoColor=black" /></a>
 
 <br><br>
 
