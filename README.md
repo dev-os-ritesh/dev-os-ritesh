@@ -110,26 +110,17 @@ Most "QR check-in" projects stop at generating a code and scanning it. Mine goes
 <img src="https://skillicons.dev/icons?i=mongodb,express,react,nodejs,js,tailwind" />
 
 
-
 **Languages & CS Fundamentals**
 <br>
 <img src="https://skillicons.dev/icons?i=cpp,java,python" />
 <br>
 <sub>· OOP · DBMS · OS · System Design</sub>
 
-<
-
-**Auth, Cloud & AI Integrations**
-<br>
-<sub>JWT · bcryptjs · Role-Based Access Control · Groq LLaMA API · ImageKit CDN · PDFKit · Nodemailer · TanStack Query</sub>
-
-<br><br>
 
 **Tools**
 <br>
 <img src="https://skillicons.dev/icons?i=git,github,postman,vscode,vite,vercel" />
 
-<br><br>
 
 ---
 
@@ -160,7 +151,6 @@ Not a stats widget — how I actually work when I start a project:
 ## 📚 Right Now
 
 - 🔨 Building: the QR check-in platform's analytics dashboard
-- 📖 Learning: TypeScript, and how to structure larger backend codebases
 - 🎯 Looking for: an internship where I can work on real systems, not just tickets
 
 ---
