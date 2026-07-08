@@ -1,13 +1,3 @@
-<div align="center">
-
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:0a0d09,100:ffb000&height=190&section=header&text=dev-os-ritesh&fontSize=52&fontColor=e8e6df&animation=fadeIn&fontAlignY=38&desc=MERN%20Stack%20Developer%20%7C%20Open%20to%20Internships&descAlignY=58&descSize=16" />
-
-<img src="https://readme-typing-svg.demolab.com/?lines=I+don't+just+write+code+%E2%80%94+I+ship+products;Full-stack+MERN+%7C+security-minded+%7C+detail-obsessed;Play+the+game+below+%E2%86%93;center=true&font=Fira+Code&width=560&height=40&color=ffb000&vCenter=true&size=20&pause=1200" />
-
-</div>
-
-<br>
-
 
 <div align="center">
 
